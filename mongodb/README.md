@@ -16,7 +16,7 @@ db.pets.insert({name: "Chuck", species: "Gato"})
 ```
 
 1. Adicione outro Peixe e um Hamster com nome Frodo
-> db.pets.insert({name: "Hilbert", species: "Peixe"})
+> db.pets.insert({name: "Hilbert", species: "Peixe"})\
 > db.pets.insert({name: "Frodo", species: "Hamster"})
 
 2. Faça uma contagem dos pets na coleção
@@ -60,7 +60,8 @@ Analise um pouco a estrutura dos dados e em seguida responda:
 3. Identifique todos os jovens (pessoas entre 12 a 18 anos).
 > db.italians.find({age: {$gte: 12, $lte: 18}})
 
-4. Identifique quantas pessoas tem gatos, quantas tem cachorro e quantas não tem nenhum dos dois\
+4. Identifique quantas pessoas tem gatos, quantas tem cachorro e quantas não tem nenhum dos dois
+
 Pessoas que possuem gato.
 > db.italians.find({cat: {$exists: true}}).count()
 
@@ -85,7 +86,8 @@ Pessoas que não possuem nem gato, nem cão.
 9. Liste as pessoas que tem o mesmo nome que seu bichano (gatou ou cachorro)
 > db.italians.find({$where: function(){ let pet=this["cat"]?this["cat"]:this["dog"]; if(pet==null) return false; return this.firstname==pet.name; }})
 
-10. Projete apenas o nome e sobrenome das pessoas com tipo de sangue de fator RH negativo\
+10. Projete apenas o nome e sobrenome das pessoas com tipo de sangue de fator RH negativo
+
 Aqui, eu não tenho certeza se o ID também era desejado, então o omiti de propósito.
 > db.italians.find({bloodType:{$regex: /-$/}}, {_id:false, firstname:true, surname:true})
 
@@ -96,37 +98,37 @@ Aqui, eu não tenho certeza se o ID também era desejado, então o omiti de propósi
 > db.italians.find({surname: "Rossi"}).sort({age: -1}).limit(5)
 
 13. Crie um italiano que tenha um leão como animal de estimação. Associe um nome e idade ao bichano
-> db.italians.insert({
->     firstname: "Lorenzo",
->     surname: "Coppola",
->     username: "user10100",
->     age: 42,
->     email: "Lorenzo.Coppola@yahoo.com",
->     bloodType: "O+",
->     id_num: "684314636153",
->     registerDate: new Date(),
->     ticketNumber: 4656,
->     jobs: ["Produção Sucroalcooleira"],
->     favFruits: ["Mamão", "Laranja"],
->     movies: [
->         {
->             title: "Forrest Gump: O Contador de Histórias (1994)",
->             rating: 5.0
->         }
->     ],
->     lion: {
->         name: "Simba",
->         age: 12
->     }
+> db.italians.insert({\
+>     firstname: "Lorenzo",\
+>     surname: "Coppola",\
+>     username: "user10100",\
+>     age: 42,\
+>     email: "Lorenzo.Coppola@yahoo.com",\
+>     bloodType: "O+",\
+>     id_num: "684314636153",\
+>     registerDate: new Date(),\
+>     ticketNumber: 4656,\
+>     jobs: ["Produção Sucroalcooleira"],\
+>     favFruits: ["Mamão", "Laranja"],\
+>     movies: [\
+>         {\
+>             title: "Forrest Gump: O Contador de Histórias (1994)",\
+>             rating: 5.0\
+>         }\
+>     ],\
+>     lion: {\
+>         name: "Simba",\
+>         age: 12\
+>     }\
 > })
 
 14. Infelizmente o Leão comeu o italiano. Remova essa pessoa usando o Id.
-> let lionOwner = db.italians.findOne({lion: {$exists: true}})
+> let lionOwner = db.italians.findOne({lion: {$exists: true}})\
 > if (lionOwner) db.italians.remove({_id: lionOwner._id})
 
 15. Passou um ano. Atualize a idade de todos os italianos e dos bichanos em 1.
-> db.italians.update({}, {$inc: {age: 1}}, {multi: true})
-> db.italians.update({cat: {$exists: true}}, {$inc: {"cat.age": 1}}, {multi: true})
+> db.italians.update({}, {$inc: {age: 1}}, {multi: true})\
+> db.italians.update({cat: {$exists: true}}, {$inc: {"cat.age": 1}}, {multi: true})\
 > db.italians.update({dog: {$exists: true}}, {$inc: {"dog.age": 1}}, {multi: true})
 
 16. O Corona Vírus chegou na Itália e misteriosamente atingiu pessoas somente com gatos e de 66 anos. Remova esses italianos.
