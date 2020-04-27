@@ -2,7 +2,7 @@ Exercícios de prática de MongoDB.
 
 -----
 
-Exercício 1- Aquecendo com os pets\
+#Exercício 1- Aquecendo com os pets\
 Insira os seguintes registros no MongoDB e em seguida responda as questões abaixo:\
 
 ```
@@ -58,7 +58,7 @@ db.pets.find({name: "Mike", species: "Cachorro"})
 
 -----
 
-Exercício 2 – Mama mia!\
+#Exercício 2 – Mama mia!\
 Importe o arquivo dos italian-people.js do seguinte endereço: Downloads NoSQL FURB. Em seguida, importe o mesmo com o seguinte comando:
 
 ```
@@ -310,3 +310,30 @@ db.italians.aggregate(
     }
 )
 ```
+
+-----
+
+#Exercício 3 - Stockbrokers\
+Importe o arquivo stocks.json do repositório Downloads NoSQL FURB. Esses dados são dados reais da bolsa americana de 2015. A importação do arquivo JSON é um pouco diferente da execução de um script:
+```
+mongoimport --db stocks --collection stocks --file stocks.json
+```
+Analise um pouco a estrutura dos dados novamente e em seguida, responda as seguintes perguntas:
+
+3.1. Liste as ações com profit acima de 0.5 (limite a 10 o resultado)
+
+3.2. Liste as ações com perdas (limite a 10 novamente)
+
+3.3. Liste as 10 ações mais rentáveis
+
+3.4. Qual foi o setor mais rentável?
+
+3.5. Ordene as ações pelo profit e usando um cursor, liste as ações.
+
+3.6. Renomeie o campo “Profit Margin” para apenas “profit”.
+
+3.7. Agora liste apenas a empresa e seu respectivo resultado
+
+3.8. Analise as ações. É uma bola de cristal na sua mão... Quais as três ações você investiria?
+
+3.9. Liste as ações agrupadas por setor
