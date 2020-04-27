@@ -135,9 +135,30 @@ Aqui, eu não tenho certeza se o ID também era desejado, então o omiti de propósi
 > db.italians.remove({age: 66, cat: {$exists: true}})
 
 17. Utilizando o framework agregate, liste apenas as pessoas com nomes iguais a sua respectiva mãe e que tenha gato ou cachorro.
+> db.italians.aggregate({$match: {$expr: {$eq: ["$firstname", "$mother.firstname"]}}})
 
 18. Utilizando aggregate framework, faça uma lista de nomes única de nomes. Faça isso usando apenas o primeiro nome
 
 19. Agora faça a mesma lista do item acima, considerando nome completo.
 
 20. Procure pessoas que gosta de Banana ou Maçã, tenham cachorro ou gato, mais de 20 e menos de 60 anos.
+> db.italians.aggregate(\
+>     { $match:\
+>         { $expr:\
+>             { $and: [\
+>                 { $or: [\
+>                     { $in: ["Banana", "$favFruits"] },\
+>                     { $in: ["Maçã", "$favFruits"] }\
+>                 ] },\
+>                 { $or: [\
+>                     { $ne: ["$cat", null] },\
+>                     { $ne: ["$dog", null] }\
+>                 ] },\
+>                 { $and: [\
+>                     { $gt: ["$age", 20] },\
+>                     { $lt: ["$age", 60] }\
+>                 ] }\
+>             ] }\
+>         }\
+>     }\
+> )
