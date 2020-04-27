@@ -152,11 +152,10 @@ db.italians.find({bloodType:{$regex: /-$/}}, {_id:false, firstname:true, surname
 ```
 db.italians.find(
     {
-        $or:
-            [
-                { cat: { $exists: true } },
-                { dog: { $exists: true } }
-            ]
+        $or: [
+            { cat: { $exists: true } },
+            { dog: { $exists: true } }
+        ]
     },
     {
         cat: true,
@@ -235,8 +234,50 @@ db.italians.aggregate(
 ```
 
 18. Utilizando aggregate framework, faça uma lista de nomes única de nomes. Faça isso usando apenas o primeiro nome
+```
+db.italians.distinct("firstname")
+```
+Ou até mesmo:
+```
+db.italians.aggregate(
+    [
+        {
+            $group: {
+                _id: "$firstname"
+            }
+        },
+        {
+            $sort: {
+                _id: 1
+            }
+        }
+    ]
+)
+```
 
 19. Agora faça a mesma lista do item acima, considerando nome completo.
+```
+db.italians.aggregate(
+    [
+        {
+            $group: {
+                _id: {
+                    $concat: [
+                        "$firstname",
+                        " ",
+                        "$surname"
+                    ]
+                }
+            }
+        },
+        {
+            $sort: {
+                _id: 1
+            }
+        }
+    ]
+)
+```
 
 20. Procure pessoas que gosta de Banana ou Maçã, tenham cachorro ou gato, mais de 20 e menos de 60 anos.
 ```
