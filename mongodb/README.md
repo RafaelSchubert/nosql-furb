@@ -142,23 +142,25 @@ Aqui, eu não tenho certeza se o ID também era desejado, então o omiti de propósi
 19. Agora faça a mesma lista do item acima, considerando nome completo.
 
 20. Procure pessoas que gosta de Banana ou Maçã, tenham cachorro ou gato, mais de 20 e menos de 60 anos.
-> db.italians.aggregate(\
->     { $match:\
->         { $expr:\
->             { $and: [\
->                 { $or: [\
->                     { $in: ["Banana", "$favFruits"] },\
->                     { $in: ["Maçã", "$favFruits"] }\
->                 ] },\
->                 { $or: [\
->                     { $ne: ["$cat", null] },\
->                     { $ne: ["$dog", null] }\
->                 ] },\
->                 { $and: [\
->                     { $gt: ["$age", 20] },\
->                     { $lt: ["$age", 60] }\
->                 ] }\
->             ] }\
->         }\
->     }\
-> )
+```
+db.italians.aggregate(
+    { $match:
+        { $expr:
+            { $and: [
+                { $or: [
+                    { $in: ["Banana", "$favFruits"] },
+                    { $in: ["Maçã", "$favFruits"] }
+                ] },
+                { $or: [
+                    { $ne: ["$cat", null] },
+                    { $ne: ["$dog", null] }
+                ] },
+                { $and: [
+                    { $gt: ["$age", 20] },
+                    { $lt: ["$age", 60] }
+                ] }
+            ] }
+        }
+    }
+)
+```
