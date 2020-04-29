@@ -294,8 +294,8 @@ db.italians.aggregate(
                     },
                     {
                         $or: [
-                            { $ne: ["$cat", null] },
-                            { $ne: ["$dog", null] }
+                            { $ne: ["$cat", undefined] },
+                            { $ne: ["$dog", undefined] }
                         ]
                     },
                     {
@@ -321,12 +321,68 @@ mongoimport --db stocks --collection stocks --file stocks.json
 Analise um pouco a estrutura dos dados novamente e em seguida, responda as seguintes perguntas:
 
 3.1. Liste as ações com profit acima de 0.5 (limite a 10 o resultado)
+```
+db.stocks.aggregate(
+    [
+        {
+            $match: {
+                $expr: { $gt: ["$Profit Margin", 0.5] }
+            }
+        },
+        { $limit: 10 }
+    ]
+)
+```
 
 3.2. Liste as ações com perdas (limite a 10 novamente)
+```
+db.stocks.aggregate(
+    [
+        {
+            $match: {
+                $expr: {
+                    $and: [
+                        { $ne: ["$Profit Margin", undefined] },
+                        { $lt: ["$Profit Margin", 0.0] }
+                    ]
+                }
+            }
+        },
+        { $limit: 10 }
+    ]
+)
+```
 
 3.3. Liste as 10 ações mais rentáveis
+```
+db.stocks.aggregate(
+    [
+        { $sort: { "Profit Margin": -1 } },
+        { $limit: 10 }
+    ]
+)
+```
 
 3.4. Qual foi o setor mais rentável?
+```
+db.stocks.aggregate(
+    [
+        {
+            $match: {
+                $expr: { $ne: ["$Sector", undefined] }
+            }
+        },
+        {
+            $group: {
+                _id: "$Sector",
+                totalProfit: { $sum: "$Profit Margin" }
+            }
+        },
+        { $sort: { totalProfit: -1 } },
+        { $limit: 1 }
+    ]
+)
+```
 
 3.5. Ordene as ações pelo profit e usando um cursor, liste as ações.
 
