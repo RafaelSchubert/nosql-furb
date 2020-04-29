@@ -385,11 +385,28 @@ db.stocks.aggregate(
 ```
 
 3.5. Ordene as ações pelo profit e usando um cursor, liste as ações.
+```
+var itAcoes = db.stocks.find().sort({profit: 1});
+while (itAcoes.hasNext()) { print(tojson(itAcoes.next())); }
+```
 
 3.6. Renomeie o campo “Profit Margin” para apenas “profit”.
+```
+db.stocks.update({}, { $rename: { "Profit Margin": "profit" } }, { multi: true })
+```
 
 3.7. Agora liste apenas a empresa e seu respectivo resultado
 
 3.8. Analise as ações. É uma bola de cristal na sua mão... Quais as três ações você investiria?
 
 3.9. Liste as ações agrupadas por setor
+```
+db.stocks.aggregate(
+    {
+        $group: {
+            _id: "$Sector",
+            stocks: { $push: "$$ROOT" }
+        }
+    }
+)
+```
