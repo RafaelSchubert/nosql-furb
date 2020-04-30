@@ -420,9 +420,45 @@ db.stocks.aggregate(
 #Exercício 4 – Fraude na Enron!\
 Um dos casos mais emblemáticos de fraude no mundo é o caso da Enron. A comunicade do MongoDB utiliza muito esse dataset pois o mesmo se tornou público, então vamos importar esse material também:
 ```
-mongoimport --db stocks --collection stocks --file enron.json
+mongoimport --db enron --collection mails --file enron.json
 ```
 
 4.1. Liste as pessoas que enviaram e-mails (de forma distinta, ou seja, sem repetir). Quantas pessoas são?
+```
+db.mails.distinct("sender")
+```
+Com a expressão:
+```
+db.mails.distinct("sender").length
+```
+Descobrimos que são `2200` remetentes diferentes.
 
 4.2. Contabilize quantos e-mails tem a palavra “fraud”
+```
+db.mails.aggregate(
+    [
+        {
+            $addFields: {
+                fraudOnSubject: {
+                    $regexFind: { input: "$subject", regex: /\bfraud\b/i }
+                },
+                fraudOnText: {
+                    $regexFind: { input: "$text", regex: /\bfraud\b/i }
+                }
+            }
+        },
+        {
+            $match: {
+                $expr: {
+                    $or: [
+                        { $ne: ["$fraudOnSubject", null] },
+                        { $ne: ["$fraudOnText", null] }
+                    ]
+                }
+            }
+        },
+        { $unset: ["fraudOnSubject", "fraudOnText"] },
+        { $limit : 1 }
+    ]
+)
+```
