@@ -58,6 +58,14 @@ scan 'italians', { COLUMNS => ['personal-data:name', 'professional-data:role'] }
 
 1.6. Apague os italianos com row id ímpar
 
+Essa certamente não é a forma mais apropriada, mas é o que dá para fazer sem usar APIs ou, provavelmente, MapReduce.
+```
+t = get_table 'italians'
+for idx in (1..(t.count)).step(2) do
+  t.deleteall String(idx)
+end
+```
+
 1.7. Crie um contador de idade 55 para o italiano de row id 5
 ```
 incr 'italians', '5', 'personal-data:age', 55
